@@ -9,14 +9,15 @@ class InvoiceViewModel : BaseViewModel() {
         const val PAY_WAY_CASH = "cash"
     }
 
+    var finalPay = 0f
+
     fun generateFoodInfo(invoice: Invoice): String {
         invoice.apply {
             val s = StringBuilder()
             dishes.forEach {
                 s.append("Name: ${it.food.name} price: ${it.food.price} amount: ${it.amount}\n")
             }
-
-            val finalPay = calculateFinalPay(invoice)
+            calculateFinalPay(invoice)
             s.append("Total: $totalAmount \n")
                 .append("Discount: $discount '\n")
                 .append("Tax: $tax \n")
@@ -27,7 +28,7 @@ class InvoiceViewModel : BaseViewModel() {
         }
     }
 
-    private fun calculateFinalPay(invoice: Invoice): Float {
+    private fun calculateFinalPay(invoice: Invoice) {
         invoice.apply {
             val afterDiscount = if (discount < 1f) {
                 totalAmount * (1 - discount)
@@ -40,7 +41,7 @@ class InvoiceViewModel : BaseViewModel() {
             } else {
                 0f
             }
-            return afterDiscount + tax + surcharges
+            finalPay = afterDiscount + tax + surcharges
         }
     }
 }

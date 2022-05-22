@@ -1,10 +1,10 @@
 package com.liven.demo.ui.transaction
 
 import android.os.Bundle
-import com.liven.demo.base.BaseVmVbFragment
+import com.liven.demo.common.CommonFragment
 import com.liven.demo.databinding.FragmentTransactionBinding
 
-class TransactionFragment : BaseVmVbFragment<TransactionViewModel, FragmentTransactionBinding>() {
+class TransactionFragment : CommonFragment<TransactionViewModel, FragmentTransactionBinding>() {
     override fun initView(savedInstanceState: Bundle?) {
 
     }

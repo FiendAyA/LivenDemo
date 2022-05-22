@@ -5,5 +5,5 @@ data class Transaction(
     val returned: Float,
     val remaining: Float,
     val invoice: Invoice,
-    val payInfo: PayInfo?
+    val payInfo: PayInfo? = null
 )

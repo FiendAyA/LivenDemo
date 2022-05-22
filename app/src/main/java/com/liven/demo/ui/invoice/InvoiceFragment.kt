@@ -1,20 +1,25 @@
 package com.liven.demo.ui.invoice
 
 import android.os.Bundle
-import com.liven.demo.base.BaseVmVbFragment
-import com.liven.demo.common.AppViewModel
+import com.liven.demo.common.CommonFragment
 import com.liven.demo.databinding.FragmentInvoiceBinding
-import com.liven.demo.ext.getAppViewModel
 
-class InvoiceFragment : BaseVmVbFragment<InvoiceViewModel, FragmentInvoiceBinding>() {
+class InvoiceFragment : CommonFragment<InvoiceViewModel, FragmentInvoiceBinding>() {
     override fun initView(savedInstanceState: Bundle?) {
 
     }
 
     override fun createObserver() {
-        getAppViewModel<AppViewModel>().invoiceLiveData.observeSticky(viewLifecycleOwner) {
+        appViewModel.invoiceLiveData.observeSticky(viewLifecycleOwner) {
             val foodInfo = mViewModel.generateFoodInfo(it)
             mViewBind.foodInfo.text = foodInfo
+        }
+
+        mViewBind.submitInvoice.setOnClickListener {
+            appViewModel.submitInvoice(
+                mViewModel.finalPay,
+                mViewBind.paidEditText.text.toString().toIntOrNull()
+            )
         }
     }
 

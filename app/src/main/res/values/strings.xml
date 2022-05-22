@@ -8,4 +8,5 @@
     <string name="review_order">Check order</string>
     <string name="pay_type">Pay type</string>
     <string name="invoice_detail">Invoice Detail</string>
+    <string name="transaction_detail">Transaction Detail</string>
 </resources>
