@@ -1,7 +1,8 @@
-package com.liven.demo
+package com.liven.demo.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.liven.demo.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
