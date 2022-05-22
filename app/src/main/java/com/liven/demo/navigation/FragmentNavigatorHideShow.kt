@@ -70,11 +70,11 @@ class FragmentNavigatorHideShow(
         //ft.replace(mContainerId, frag);
         ft.setPrimaryNavigationFragment(frag)
         @IdRes val destId = destination.id
-        var mBackStack: ArrayDeque<Int>? = null
+        var mBackStack: java.util.ArrayDeque<Int>? = null
         try {
             val field = FragmentNavigator::class.java.getDeclaredField("mBackStack")
             field.isAccessible = true
-            mBackStack = field[this] as ArrayDeque<Int>
+            mBackStack = field[this] as java.util.ArrayDeque<Int>
         } catch (e: NoSuchFieldException) {
             e.printStackTrace()
         } catch (e: IllegalAccessException) {
@@ -83,7 +83,7 @@ class FragmentNavigatorHideShow(
         val initialNavigation = mBackStack!!.isEmpty()
         val isSingleTopReplacement = (navOptions != null && !initialNavigation
                 && navOptions.shouldLaunchSingleTop()
-                && mBackStack.last() == destId)
+                && mBackStack.peekLast() == destId)
         val isAdded: Boolean = if (initialNavigation) {
             true
         } else if (isSingleTopReplacement) {
@@ -94,7 +94,7 @@ class FragmentNavigatorHideShow(
                 // remove it from the back stack and put our replacement
                 // on the back stack in its place
                 mFragmentManager.popBackStack(
-                    generateBackStackName(mBackStack.size, mBackStack.last()),
+                    generateBackStackName(mBackStack.size, mBackStack.peekLast()!!),
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
                 ft.addToBackStack(generateBackStackName(mBackStack.size, destId))

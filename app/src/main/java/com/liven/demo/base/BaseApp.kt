@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import com.liven.demo.common.AppViewModel
 
-val appViewModel by lazy { ViewModelProvider(BaseApp()).get(AppViewModel::class.java) }
-
 open class BaseApp : Application(), ViewModelStoreOwner {
 
     private lateinit var mAppViewModelStore: ViewModelStore

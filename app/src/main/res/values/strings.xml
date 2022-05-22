@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">LivenDemo</string>
+    <string name="home">Home</string>
+    <string name="invoice">Invoice</string>
+    <string name="transaction">Transaction</string>
+    <string name="select_food">Please select food here!</string>
+    <string name="submit_order">Submit</string>
+    <string name="review_order">Check order</string>
+    <string name="pay_type">Pay type</string>
+    <string name="invoice_detail">Invoice Detail</string>
 </resources>

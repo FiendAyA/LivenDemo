@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@+id/nav_home">
 
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.liven.demo.ui.home.HomeFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home"/>
+
+    <fragment
+        android:id="@+id/nav_invoice"
+        android:name="com.liven.demo.ui.invoice.InvoiceFragment"
+        android:label="@string/invoice"
+        tools:layout="@layout/fragment_invoice"/>
+
+    <fragment
+        android:id="@+id/nav_transaction"
+        android:name="com.liven.demo.ui.transaction.TransactionFragment"
+        android:label="@string/transaction"
+        tools:layout="@layout/fragment_transaction"/>
 </navigation>
