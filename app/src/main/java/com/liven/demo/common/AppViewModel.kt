@@ -1,6 +1,5 @@
 package com.liven.demo.common
 
-import android.util.Log
 import android.widget.Toast
 import com.liven.demo.base.BaseViewModel
 import com.liven.demo.base.appContext
@@ -11,32 +10,33 @@ import com.liven.demo.entity.Transaction
 import com.liven.demo.livedata.EventLiveData
 
 class AppViewModel : BaseViewModel() {
-    private var invoice = Invoice()
-    val invoiceLiveData: EventLiveData<Invoice> = EventLiveData()
+    var invoice = Invoice()
     val transactionLiveData: EventLiveData<Transaction> = EventLiveData()
 
-    fun changeFoodAmount(food: Food, amount: Int?) {
-        Log.i("A", "$amount")
-        invoiceLiveData.postValue(
-            invoice.apply {
-                val index = dishes.indexOfFirst {
-                    it.food == food
-                }
-                if (amount == null || amount == 0) {
+    fun changeFoodAmount(food: Food, amount: Int, customerNo: Int) {
+        invoice.apply {
+            val index = dishes.indexOfFirst {
+                it.food == food && it.personNumber == customerNo
+            }
+            if (index != -1) {
+                if (amount == 0) {
                     dishes.removeAt(index)
                 } else {
-                    if (index != -1) {
-                        dishes[index].amount = amount
-                    } else {
-                        dishes.add(DishPerson(food, amount, 0))
-                    }
+                    dishes[index].amount = amount
                 }
-                var tempAmount = 0f
-                dishes.forEach {
-                    tempAmount += it.amount * it.food.price
-                }
-                totalAmount = tempAmount
-            })
+            } else {
+                dishes.add(DishPerson(food, amount, customerNo))
+            }
+            var tempAmount = 0f
+            dishes.forEach {
+                tempAmount += it.amount * it.food.price
+            }
+            totalAmount = tempAmount
+        }
+    }
+
+    fun changeDiscount(discount: Float) {
+        invoice.discount = discount
     }
 
     fun submitInvoice(finalPay: Float, paid: Int?) {
@@ -51,12 +51,11 @@ class AppViewModel : BaseViewModel() {
                 Transaction(
                     paid.toFloat(),
                     paid - finalPay,
-                    finalPay,
+                    0f,
                     invoice
                 )
             )
             invoice = Invoice()
-            invoiceLiveData.postValue(invoice)
         }
     }
 }

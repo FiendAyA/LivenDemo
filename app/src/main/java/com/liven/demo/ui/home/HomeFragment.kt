@@ -13,8 +13,8 @@ class HomeFragment : CommonFragment<HomeViewModel, FragmentHomeBinding>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         mViewBind.foodList.apply {
-            adapter = FoodListAdapter(DataManager.foodList) { food, int ->
-                appViewModel.changeFoodAmount(food, int)
+            adapter = FoodListAdapter(DataManager.foodList) { food, foodAmount, customerNo  ->
+                appViewModel.changeFoodAmount(food, foodAmount, customerNo)
             }
             layoutManager = LinearLayoutManager(requireContext())
         }

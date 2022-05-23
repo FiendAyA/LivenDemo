@@ -1,8 +1,6 @@
 package com.liven.demo.ui.home
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
+import android.widget.Button
 import android.widget.EditText
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -10,7 +8,7 @@ import com.liven.demo.R
 import com.liven.demo.base.QuickAdapter
 import com.liven.demo.entity.Food
 
-class FoodListAdapter(data: MutableList<Food>, val method: (Food, Int?) -> Unit) :
+class FoodListAdapter(data: MutableList<Food>, val method: (Food, Int, Int) -> Unit) :
     QuickAdapter<Food>(R.layout.item_food, data) {
 
     override fun convert(holder: BaseViewHolder, item: Food) {
@@ -18,18 +16,13 @@ class FoodListAdapter(data: MutableList<Food>, val method: (Food, Int?) -> Unit)
             .setText(R.id.food_price, "$${item.price}")
         Glide.with(holder.itemView).load(item.imgSrc).placeholder(R.drawable.img)
             .into(holder.getView(R.id.food_img))
-        holder.getView<EditText>(R.id.food_amount).addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        holder.getView<Button>(R.id.change_button).setOnClickListener {
+            val foodAmount =
+                holder.getView<EditText>(R.id.food_amount).text.toString().toIntOrNull() ?: 0
+            val customerNo =
+                holder.getView<EditText>(R.id.customer_number).text.toString().toIntOrNull()?:1
+                method.invoke(item, foodAmount, customerNo)
+        }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-
-                Log.i("A", s.toString())
-                method.invoke(item, s.toString().toIntOrNull())
-            }
-        })
     }
 }

@@ -9,4 +9,7 @@
     <string name="pay_type">Pay type</string>
     <string name="invoice_detail">Invoice Detail</string>
     <string name="transaction_detail">Transaction Detail</string>
+    <string name="food_amount">Food Amount</string>
+    <string name="customer_number">Customer No.</string>
+    <string name="generate_invoice">Generate Invoice</string>
 </resources>

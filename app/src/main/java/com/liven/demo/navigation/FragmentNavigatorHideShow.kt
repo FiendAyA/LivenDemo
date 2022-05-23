@@ -11,6 +11,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigator
+import com.liven.demo.R
 
 @Navigator.Name("fragment")
 class FragmentNavigatorHideShow(
@@ -18,6 +19,7 @@ class FragmentNavigatorHideShow(
     private val mFragmentManager: FragmentManager,
     private val mContainerId: Int
 ) : FragmentNavigator(mContext, mFragmentManager, mContainerId) {
+    private val topThreeDest = arrayOf(R.id.nav_home, R.id.nav_invoice, R.id.nav_transaction)
 
     override fun navigate(
         destination: Destination,
@@ -27,8 +29,8 @@ class FragmentNavigatorHideShow(
     ): NavDestination? {
         if (mFragmentManager.isStateSaved) {
             Log.i(
-                TAG, "Ignoring navigate() call: FragmentManager has already"
-                        + " saved its state"
+                TAG,
+                "Ignoring navigate() call: FragmentManager has already" + " saved its state"
             )
             return null
         }
@@ -36,9 +38,6 @@ class FragmentNavigatorHideShow(
         if (className[0] == '.') {
             className = mContext.packageName + className
         }
-        //final Fragment frag = instantiateFragment(mContext, mManager,
-        //       className, args);
-        //frag.setArguments(args);
         val ft = mFragmentManager.beginTransaction()
         var enterAnim = navOptions?.enterAnim ?: -1
         var exitAnim = navOptions?.exitAnim ?: -1
@@ -51,25 +50,8 @@ class FragmentNavigatorHideShow(
             popExitAnim = if (popExitAnim != -1) popExitAnim else 0
             ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
         }
-        val fragment = mFragmentManager.primaryNavigationFragment
-        if (fragment != null) {
-            ft.setMaxLifecycle(fragment, Lifecycle.State.STARTED)
-            ft.hide(fragment)
-        }
-        var frag: Fragment?
-        val tag = destination.id.toString()
-        frag = mFragmentManager.findFragmentByTag(tag)
-        if (frag != null) {
-            ft.setMaxLifecycle(frag, Lifecycle.State.RESUMED)
-            ft.show(frag)
-        } else {
-            frag = instantiateFragment(mContext, mFragmentManager, className, args)
-            frag.arguments = args
-            ft.add(mContainerId, frag, tag)
-        }
-        //ft.replace(mContainerId, frag);
-        ft.setPrimaryNavigationFragment(frag)
-        @IdRes val destId = destination.id
+
+        // 获取backStack
         var mBackStack: java.util.ArrayDeque<Int>? = null
         try {
             val field = FragmentNavigator::class.java.getDeclaredField("mBackStack")
@@ -80,29 +62,43 @@ class FragmentNavigatorHideShow(
         } catch (e: IllegalAccessException) {
             e.printStackTrace()
         }
-        val initialNavigation = mBackStack!!.isEmpty()
-        val isSingleTopReplacement = (navOptions != null && !initialNavigation
-                && navOptions.shouldLaunchSingleTop()
-                && mBackStack.peekLast() == destId)
-        val isAdded: Boolean = if (initialNavigation) {
-            true
-        } else if (isSingleTopReplacement) {
-            // Single Top means we only want one instance on the back stack
-            if (mBackStack.size > 1) {
-                // If the Fragment to be replaced is on the FragmentManager's
-                // back stack, a simple replace() isn't enough so we
-                // remove it from the back stack and put our replacement
-                // on the back stack in its place
-                mFragmentManager.popBackStack(
-                    generateBackStackName(mBackStack.size, mBackStack.peekLast()!!),
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE
-                )
-                ft.addToBackStack(generateBackStackName(mBackStack.size, destId))
+
+        if (mBackStack!!.size > 0) {
+            val fragment = mFragmentManager.findFragmentByTag(mBackStack.last.toString())
+            if (fragment != null) {
+                ft.setMaxLifecycle(fragment, Lifecycle.State.STARTED)
+                ft.hide(fragment)
             }
-            false
+        }
+        val tag = destination.id.toString()
+        var frag = mFragmentManager.findFragmentByTag(tag)
+        if (frag != null) {
+            ft.setMaxLifecycle(frag, Lifecycle.State.RESUMED)
+            ft.show(frag)
         } else {
-            ft.addToBackStack(generateBackStackName(mBackStack.size + 1, destId))
-            true
+            frag = instantiateFragment(mContext, mFragmentManager, className, args)
+            frag.arguments = args
+            ft.add(mContainerId, frag, tag)
+        }
+
+        @IdRes val destId = destination.id
+
+        // 首次开始navigation
+        val initialNavigation = mBackStack.isEmpty()
+        // 判定是否为一级导航的三个页面
+        val isSingleInstance = navOptions != null && !initialNavigation
+                && destination.id in topThreeDest
+                && mBackStack.contains(destId)
+
+        when {
+            initialNavigation -> {
+            }
+            isSingleInstance -> {
+                mBackStack.remove(destId)
+            }
+            else -> {
+                ft.addToBackStack(generateBackStackName(mBackStack.size + 1, destId))
+            }
         }
         if (navigatorExtras is Extras) {
             for ((key, value) in navigatorExtras.sharedElements) {
@@ -111,13 +107,14 @@ class FragmentNavigatorHideShow(
         }
         ft.setReorderingAllowed(true)
         ft.commit()
+
         // The commit succeeded, update our view of the world
-        return if (isAdded) {
-            mBackStack.add(destId)
-            destination
-        } else {
-            null
+        mBackStack.add(destId)
+        mBackStack.forEach {
+            Log.i(TAG, "Id is: $it")
         }
+        Log.d(TAG, "mBackStack is ${mBackStack.size}")
+        return destination
     }
 
     private fun generateBackStackName(backStackindex: Int, destid: Int): String {

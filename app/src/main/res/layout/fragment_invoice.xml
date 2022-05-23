@@ -9,19 +9,29 @@
         android:layout_height="match_parent"
         tools:context=".ui.invoice.InvoiceFragment">
 
-        <TextView
-            android:id="@+id/invoice_detail"
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/pay_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/invoice_detail"
+            android:layout_marginStart="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/food_info"
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/pay_way"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/pay_type"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/discount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/invoice_detail" />
+            android:hint="Enter discount given here."
+            android:inputType="numberDecimal"
+            app:layout_constraintTop_toBottomOf="@id/pay_type" />
 
         <EditText
             android:id="@+id/paid_edit_text"
@@ -29,7 +39,36 @@
             android:layout_height="wrap_content"
             android:hint="Enter money paid here."
             android:inputType="number"
-            app:layout_constraintTop_toBottomOf="@id/food_info" />
+            app:layout_constraintTop_toBottomOf="@id/discount" />
+
+        <Button
+            android:id="@+id/generate_invoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/generate_invoice"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/paid_edit_text" />
+
+        <TextView
+            android:id="@+id/invoice_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/invoice_detail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generate_invoice" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            app:layout_constraintBottom_toTopOf="@id/submit_invoice"
+            app:layout_constraintTop_toBottomOf="@id/invoice_detail">
+
+            <TextView
+                android:id="@+id/invoice_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
 
         <Button
             android:id="@+id/submit_invoice"
