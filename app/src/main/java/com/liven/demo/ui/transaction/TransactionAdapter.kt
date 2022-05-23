@@ -21,9 +21,4 @@ class TransactionAdapter(data: MutableList<Transaction>) :
         return s.toString()
     }
 
-    fun setData(transaction: Transaction) {
-        data.add(transaction)
-        Log.i("A", "$data")
-        notifyItemInserted(data.size)
-    }
 }

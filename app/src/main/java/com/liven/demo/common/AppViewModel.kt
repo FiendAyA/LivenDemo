@@ -11,7 +11,7 @@ import com.liven.demo.livedata.EventLiveData
 
 class AppViewModel : BaseViewModel() {
     var invoice = Invoice()
-    val transactionLiveData: EventLiveData<Transaction> = EventLiveData()
+    val transactionLiveData: EventLiveData<MutableList<Transaction>> = EventLiveData()
 
     fun changeFoodAmount(food: Food, amount: Int, customerNo: Int) {
         invoice.apply {
@@ -47,14 +47,13 @@ class AppViewModel : BaseViewModel() {
         if (paid < finalPay) {
             Toast.makeText(appContext, "No enough money paid", Toast.LENGTH_SHORT).show()
         } else {
-            transactionLiveData.postValue(
-                Transaction(
-                    paid.toFloat(),
-                    paid - finalPay,
-                    0f,
-                    invoice
-                )
-            )
+            Toast.makeText(appContext, "Succeed", Toast.LENGTH_SHORT).show()
+            var list = transactionLiveData.value
+            if (list == null) {
+                list = mutableListOf()
+            }
+            list.add(Transaction(paid.toFloat(), paid - finalPay, 0f, invoice))
+            transactionLiveData.postValue(list)
             invoice = Invoice()
         }
     }

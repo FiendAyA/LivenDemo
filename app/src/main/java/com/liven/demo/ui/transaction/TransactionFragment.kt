@@ -16,7 +16,8 @@ class TransactionFragment : CommonFragment<TransactionViewModel, FragmentTransac
 
     override fun createObserver() {
         appViewModel.transactionLiveData.observeSticky(viewLifecycleOwner) {
-            transactionAdapter.setData(it)
+            transactionAdapter.addData(it)
+            mViewModel.uploadTransaction(it)
         }
     }
 
