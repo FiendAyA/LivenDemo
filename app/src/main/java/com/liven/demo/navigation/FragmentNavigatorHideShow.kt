@@ -19,7 +19,7 @@ class FragmentNavigatorHideShow(
     private val mFragmentManager: FragmentManager,
     private val mContainerId: Int
 ) : FragmentNavigator(mContext, mFragmentManager, mContainerId) {
-    private val topThreeDest = arrayOf(R.id.nav_home, R.id.nav_invoice, R.id.nav_transaction)
+
 
     override fun navigate(
         destination: Destination,

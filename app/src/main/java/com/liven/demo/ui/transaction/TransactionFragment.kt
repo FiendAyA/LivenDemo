@@ -22,6 +22,7 @@ class TransactionFragment : CommonFragment<TransactionViewModel, FragmentTransac
     }
 
     override fun lazyLoadData() {
+        shouldInterceptBackPressed = true
     }
 
     override fun showLoading(message: String) {
@@ -29,4 +30,5 @@ class TransactionFragment : CommonFragment<TransactionViewModel, FragmentTransac
 
     override fun dismissLoading() {
     }
+
 }

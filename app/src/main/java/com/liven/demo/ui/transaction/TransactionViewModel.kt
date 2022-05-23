@@ -11,11 +11,9 @@ class TransactionViewModel : BaseViewModel() {
     private val database = FirebaseDatabase.getInstance()
     private val myRef = database.getReference("Transaction")
 
-    fun uploadTransaction(transactions: MutableList<Transaction>) {
+    fun uploadTransaction(transaction: Transaction) {
         viewModelScope.launch(Dispatchers.Default) {
-            transactions.forEach {
-                myRef.setValue(it)
-            }
+            myRef.setValue(transaction)
         }
     }
 }

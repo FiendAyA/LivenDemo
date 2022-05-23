@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.liven.demo.R
 import com.liven.demo.databinding.ActivityMainBinding
+import com.liven.demo.navigation.setupWithNavController
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mViewBind: ActivityMainBinding
@@ -21,6 +21,6 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration =
             AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_invoice, R.id.nav_transaction))
         setupActionBarWithNavController(navHostFragment.navController, appBarConfiguration)
-        mViewBind.navView.setupWithNavController(navHostFragment.navController)
+        setupWithNavController(mViewBind.navView, navHostFragment.navController)
     }
 }

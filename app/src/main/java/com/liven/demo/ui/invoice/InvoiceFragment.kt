@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.liven.demo.common.CommonFragment
 import com.liven.demo.databinding.FragmentInvoiceBinding
+import com.liven.demo.ext.nav
 
 class InvoiceFragment : CommonFragment<InvoiceViewModel, FragmentInvoiceBinding>() {
     override fun initView(savedInstanceState: Bundle?) {
@@ -74,6 +75,7 @@ class InvoiceFragment : CommonFragment<InvoiceViewModel, FragmentInvoiceBinding>
     }
 
     override fun lazyLoadData() {
+        shouldInterceptBackPressed = true
     }
 
     override fun showLoading(message: String) {
